@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- IOC控制反射的作用是为了解耦程序间的耦合
+    依赖注入的作用是维护程序间的关系
+    -->
+<context:component-scan base-package="com.zff"></context:component-scan>
+
+<!--    <bean id="accountService" class="com.zff.service.impl.AccountServiceImpl">-->
+<!--        <property name="name" value="123"></property>-->
+<!--    </bean>-->
+<!--    <bean id="accountDao" class="com.zff.dao.impl.AccountDaoImpl">-->
+
+<!--    </bean>-->
+
+</beans>
