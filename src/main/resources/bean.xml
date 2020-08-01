@@ -18,5 +18,14 @@
 <!--    <bean id="accountDao" class="com.zff.dao.impl.AccountDaoImpl">-->
 
 <!--    </bean>-->
-
+<!--
+@Service 应用在业务层
+@Controller 应用在表现层
+@Repository 应用在持久层
+@Autowired:
+   自动按照类型注入：只有容器中唯一的一个bean对象类型AccountDao和要注入的变量类型accountDao匹配
+    如果有多个，以变量名称去找类
+@Value
+用于注入基本类型和String类型的数据 
+-->
 </beans>
