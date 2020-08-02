@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zff.dao.AccountDao">
+    <!--user在SqlMapConfig.xml的typeAlias别名 -->
+    <resultMap id="AccountMap" type="account">
+        <id property="id" column="id"></id>
+        <result property="uid" column="uid"></result>
+        <result property="money" column="money"></result>
+
+    </resultMap>
+
+<!--    <resultMap id="AccountUserMap" type="account">-->
+<!--        <id property="id" column="aid"></id>-->
+<!--        <result property="uid" column="uid"></result>-->
+<!--        <result property="money" column="money"></result>-->
+<!--        <association property="user" column="uid" javaType="user">-->
+<!--            <id property="id" column="id"></id>-->
+<!--            <result property="username" column="username"></result>-->
+<!--            <result property="address" column="address"></result>-->
+<!--            <result property="birthday" column="birthday"></result>-->
+<!--            <result property="sex" column="sex"></result>-->
+<!--        </association>-->
+
+<!--    </resultMap>-->
+
+<!--    <resultMap id="LazyAccountUserMap" type="account">-->
+<!--        <id property="id" column="id"></id>-->
+<!--        <result property="uid" column="uid"></result>-->
+<!--        <result property="money" column="money"></result>-->
+<!--        <association property="user" column="uid" javaType="user" select="com.myitem.dao.UserDao.findUserById">-->
+
+<!--        </association>-->
+
+<!--    </resultMap>-->
+    <sql id="defalutAccount">
+        select * from account
+    </sql>
+
+    <!--配置sql:id为UserDao的方法名称-->
+    <select id="findAllAccount" resultMap="AccountMap">
+        <include refid="defalutAccount"></include>
+    </select>
+
+<!--    <select id="findAllAccount" resultMap="LazyAccountUserMap">-->
+<!--&#45;&#45;         SELECT a.id AS aid,a.MONEY,a.UID,u.* FROM account a,user u WHERE-->
+<!--&#45;&#45;         a.uid=u.id;-->
+<!--            select * from account-->
+<!--    </select>-->
+
+    <select id="findAccountById" resultType="account">
+        select * from account where id=#{id}
+    </select>
+
+    <insert id="saveAccount" parameterType="account">
+        <selectKey keyProperty="id" keyColumn="id" resultType="int" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+        insert into account(id,uid,money) values(#{id},#{uid},#{money})
+    </insert>
+
+    <delete id="deleteAccount" parameterType="int">
+        delete from account where id=#{id}
+    </delete>
+
+    <update id="updateAccount" parameterType="account">
+        update account
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id!=null">id=#{id}</if>
+            <if test="uid!=null">uid=#{uid}</if>
+            <if test="money!=null">money=#{money}</if>
+        </trim>
+    </update>
+
+</mapper>
