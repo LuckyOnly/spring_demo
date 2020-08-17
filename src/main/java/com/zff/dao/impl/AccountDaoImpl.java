@@ -2,6 +2,8 @@ package com.zff.dao.impl;
 
 import com.zff.dao.AccountDao;
 import com.zff.domain.Account;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.List;
 
@@ -9,6 +11,8 @@ import java.util.List;
  * 账号持久层实现类
  */
 public class AccountDaoImpl implements AccountDao {
+    @Autowired
+    @Qualifier
     private  AccountDao accountDao;
     public List<Account> findAllAccount() {
         return accountDao.findAllAccount();

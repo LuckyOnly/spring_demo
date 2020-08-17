@@ -15,6 +15,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.InputStream;
 import java.sql.SQLOutput;
+import java.util.List;
 
 public class MybatisAccountTest {
     private InputStream in;
@@ -44,9 +45,13 @@ public class MybatisAccountTest {
         ApplicationContext ac= new ClassPathXmlApplicationContext("bean.xml");
         //Component 注解默认取类名且首字母小写
         AccountService as3 = (AccountService)ac.getBean("accountServiceImpl");
-//        System.out.println(as3.findAllAccount());
-        accountDao.findAllAccount();
-        System.out.println(123);
+        System.out.println(as3.findAllAccount());
+
+//        List<Account> accountList= accountDao.findAllAccount();
+//        for(Account account:accountList){
+//            System.out.println(account);
+//        }
+
     }
 
 

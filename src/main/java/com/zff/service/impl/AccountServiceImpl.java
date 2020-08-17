@@ -4,8 +4,15 @@ import com.zff.dao.AccountDao;
 import com.zff.dao.impl.AccountDaoImpl;
 import com.zff.domain.Account;
 import com.zff.service.AccountService;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -13,11 +20,32 @@ import java.util.List;
  */
 @Component
 public class AccountServiceImpl implements AccountService {
+//    @Autowired
 
     private AccountDao accountDao;
-
+    private InputStream in;
+    private SqlSessionFactoryBuilder builder;
+    private SqlSessionFactory factory;
+    private SqlSession session;
+    private Account account;
     public List<Account> findAllAccount() {
-        return accountDao.findAllAccount();
+        List<Account> accounts=null;
+        try{
+            in = Resources.getResourceAsStream("SqlMapConfig.xml");
+            builder=new SqlSessionFactoryBuilder();
+            factory=builder.build(in);
+            session = factory.openSession();
+            accountDao=session.getMapper(AccountDao.class);
+
+           accounts= accountDao.findAllAccount();
+            session.commit();
+            session.close();
+            in.close();
+        }
+        catch (Exception e){
+            System.out.println(false);
+        }
+        return accounts;
     }
 
     public Account findAccountById(Integer id) {

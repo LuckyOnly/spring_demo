@@ -1,9 +1,13 @@
 package com.zff.dao;
 
 import com.zff.domain.Account;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Mapper
+@Repository
 public interface AccountDao {
     /**
      * 查询所有账号信息
