@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/asm-1.5.3.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/cglib-2.1_3.jar!/" />
+      <root url="file://$MAVEN_REPOSITORY$" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

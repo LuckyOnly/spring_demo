@@ -1,5 +1,3 @@
-import com.sun.xml.internal.stream.events.XMLEventAllocatorImpl;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;

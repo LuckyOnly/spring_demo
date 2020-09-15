@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.springframework.org/schema/context
-    http://www.springframework.org/schema/context/spring-context.xsd">
-    <!-- IOC控制反射的作用是为了解耦程序间的耦合
-    依赖注入的作用是维护程序间的关系
-    -->
-<context:component-scan base-package="com.zff"></context:component-scan>
+    <!-- 配置spring的Ioc,将service对象配置进来-->
 
-<!--    <bean id="accountService" class="com.zff.service.impl.AccountServiceImpl">-->
-<!--        <property name="name" value="123"></property>-->
-<!--    </bean>-->
-<!--    <bean id="accountDao" class="com.zff.dao.impl.AccountDaoImpl">-->
-
-<!--    </bean>-->
-<!--
-@Service 应用在业务层
-@Controller 应用在表现层
-@Repository 应用在持久层
-@Autowired:
-   自动按照类型注入：只有容器中唯一的一个bean对象类型AccountDao和要注入的变量类型accountDao匹配
-    如果有多个，以变量名称去找类
-@Value
-用于注入基本类型和String类型的数据 
+<bean id="accountService" class="com.zff.service.Impl.AccountServiceImpl"></bean>
+<!--配置spring的aop
+1.把通知Bean交给spring
+2.使用aop:config标签开始aop配置
+3.使用aop:aspect标签配置切面
+ID 唯一标识
+ref 指定通知类bean的ID
+4.在aop:aspect标签内部使用对应的标签配置通知类型
+aop:before是前置通知
+pointcut属性用于指定切入点表达式
+execution：
+ 访问修饰 返回值 包名.类名.方法名
+ public void com.zff.service.Impl.AccountServiceImpl.saveAccount()
+ public可以省略  *匹配void （..）匹配有参数或者没有参数
 -->
+
+    <bean id="logger" class="com.zff.utils.Logger"></bean>
+    <aop:config>
+        <aop:aspect id="logAdvice" ref="logger">
+            <aop:before method="printLog" pointcut="execution(* com.zff.service.Impl.*.*(..))"/>
+        </aop:aspect>
+    </aop:config>
+
 </beans>
