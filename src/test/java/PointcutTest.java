@@ -7,7 +7,7 @@ public class PointcutTest {
         ApplicationContext ac= new ClassPathXmlApplicationContext("bean.xml");
         IAccountService accountService=(IAccountService) ac.getBean("accountService");
         accountService.saveAccount();
-        accountService.updateAccount(1);
-        accountService.deleteAccount();
+//        accountService.updateAccount(1);
+//        accountService.deleteAccount();
     }
 }

@@ -27,8 +27,17 @@ execution：
 
     <bean id="logger" class="com.zff.utils.Logger"></bean>
     <aop:config>
+        <aop:pointcut id="pt1" expression="execution(* com.zff.service.Impl.*.*(..))"/>
         <aop:aspect id="logAdvice" ref="logger">
-            <aop:before method="printLog" pointcut="execution(* com.zff.service.Impl.*.*(..))"/>
+            <!--切入点执行之前-->
+            <aop:before method="beforePrintLog" pointcut-ref="pt1" />
+            <!--切入点正常执行之后-->
+            <aop:after-returning method="afterReturningPrintLog"  pointcut-ref="pt1"/>
+            <!--切入点执行后产生异常-->
+            <aop:after-throwing method="afterThrowingPrintLog"  pointcut-ref="pt1"/>
+            <!--切入点执行后执行-->
+            <aop:after method="afterPrintLog"  pointcut-ref="pt1"/>
+            <aop:around method="aroundPrintLog" pointcut-ref="pt1"/>
         </aop:aspect>
     </aop:config>
 
