@@ -2,14 +2,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop.xsd">
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- 配置spring的Ioc,将service对象配置进来-->
+<context:component-scan base-package="com.zff"></context:component-scan>
 
-<bean id="accountService" class="com.zff.service.Impl.AccountServiceImpl"></bean>
+
 <!--配置spring的aop
 1.把通知Bean交给spring
 2.使用aop:config标签开始aop配置
@@ -24,21 +28,21 @@ execution：
  public void com.zff.service.Impl.AccountServiceImpl.saveAccount()
  public可以省略  *匹配void （..）匹配有参数或者没有参数
 -->
-
-    <bean id="logger" class="com.zff.utils.Logger"></bean>
-    <aop:config>
-        <aop:pointcut id="pt1" expression="execution(* com.zff.service.Impl.*.*(..))"/>
-        <aop:aspect id="logAdvice" ref="logger">
-            <!--切入点执行之前-->
-            <aop:before method="beforePrintLog" pointcut-ref="pt1" />
-            <!--切入点正常执行之后-->
-            <aop:after-returning method="afterReturningPrintLog"  pointcut-ref="pt1"/>
-            <!--切入点执行后产生异常-->
-            <aop:after-throwing method="afterThrowingPrintLog"  pointcut-ref="pt1"/>
-            <!--切入点执行后执行-->
-            <aop:after method="afterPrintLog"  pointcut-ref="pt1"/>
-            <aop:around method="aroundPrintLog" pointcut-ref="pt1"/>
-        </aop:aspect>
-    </aop:config>
-
+<!--    <bean id="accountService" class="com.zff.service.Impl.AccountServiceImpl"></bean>-->
+<!--    <bean id="logger" class="com.zff.utils.Logger"></bean>-->
+<!--    <aop:config>-->
+<!--        <aop:pointcut id="pt1" expression="execution(* com.zff.service.Impl.*.*(..))"/>-->
+<!--        <aop:aspect id="logAdvice" ref="logger">-->
+<!--            &lt;!&ndash;切入点执行之前&ndash;&gt;-->
+<!--            <aop:before method="beforePrintLog" pointcut-ref="pt1" />-->
+<!--            &lt;!&ndash;切入点正常执行之后&ndash;&gt;-->
+<!--            <aop:after-returning method="afterReturningPrintLog"  pointcut-ref="pt1"/>-->
+<!--            &lt;!&ndash;切入点执行后产生异常&ndash;&gt;-->
+<!--            <aop:after-throwing method="afterThrowingPrintLog"  pointcut-ref="pt1"/>-->
+<!--            &lt;!&ndash;切入点执行后执行&ndash;&gt;-->
+<!--            <aop:after method="afterPrintLog"  pointcut-ref="pt1"/>-->
+<!--            <aop:around method="aroundPrintLog" pointcut-ref="pt1"/>-->
+<!--        </aop:aspect>-->
+<!--    </aop:config>-->
+<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 </beans>
