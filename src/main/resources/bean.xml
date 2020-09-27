@@ -2,47 +2,74 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop.xsd
-        http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd">
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <!-- 配置spring的Ioc,将service对象配置进来-->
-<context:component-scan base-package="com.zff"></context:component-scan>
+    <!-- IOC控制反射的作用是为了解耦程序间的耦合
+    依赖注入的作用是维护程序间的关系
+    -->
+<!--    <context:component-scan base-package="com.zff"></context:component-scan>-->
 
+    <!--    <bean id="accountService" class="com.zff.service.impl.AccountServiceImpl">-->
+    <!--        <property name="name" value="123"></property>-->
+    <!--    </bean>-->
+    <!--    <bean id="accountDao" class="com.zff.dao.impl.AccountDaoImpl">-->
 
-<!--配置spring的aop
-1.把通知Bean交给spring
-2.使用aop:config标签开始aop配置
-3.使用aop:aspect标签配置切面
-ID 唯一标识
-ref 指定通知类bean的ID
-4.在aop:aspect标签内部使用对应的标签配置通知类型
-aop:before是前置通知
-pointcut属性用于指定切入点表达式
-execution：
- 访问修饰 返回值 包名.类名.方法名
- public void com.zff.service.Impl.AccountServiceImpl.saveAccount()
- public可以省略  *匹配void （..）匹配有参数或者没有参数
--->
-<!--    <bean id="accountService" class="com.zff.service.Impl.AccountServiceImpl"></bean>-->
-<!--    <bean id="logger" class="com.zff.utils.Logger"></bean>-->
-<!--    <aop:config>-->
-<!--        <aop:pointcut id="pt1" expression="execution(* com.zff.service.Impl.*.*(..))"/>-->
-<!--        <aop:aspect id="logAdvice" ref="logger">-->
-<!--            &lt;!&ndash;切入点执行之前&ndash;&gt;-->
-<!--            <aop:before method="beforePrintLog" pointcut-ref="pt1" />-->
-<!--            &lt;!&ndash;切入点正常执行之后&ndash;&gt;-->
-<!--            <aop:after-returning method="afterReturningPrintLog"  pointcut-ref="pt1"/>-->
-<!--            &lt;!&ndash;切入点执行后产生异常&ndash;&gt;-->
-<!--            <aop:after-throwing method="afterThrowingPrintLog"  pointcut-ref="pt1"/>-->
-<!--            &lt;!&ndash;切入点执行后执行&ndash;&gt;-->
-<!--            <aop:after method="afterPrintLog"  pointcut-ref="pt1"/>-->
-<!--            <aop:around method="aroundPrintLog" pointcut-ref="pt1"/>-->
-<!--        </aop:aspect>-->
-<!--    </aop:config>-->
-<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+    <!--    </bean>-->
+    <!--
+    @Service 应用在业务层
+    @Controller 应用在表现层
+    @Repository 应用在持久层
+    @Autowired:
+       自动按照类型注入：只有容器中唯一的一个bean对象类型AccountDao和要注入的变量类型accountDao匹配
+        如果有多个，以变量名称去找类
+    @Value
+    用于注入基本类型和String类型的数据
+    -->
+    <bean id="accountService" class="com.zff.service.Impl.AccountServiceImpl">
+        <property name="accountDao" ref="accountDao"></property>
+    </bean>
+
+    <!--配置jdbc-->
+    <bean id="dataTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!-- 配置数据源-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://localhost:3306/test"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="123456"></property>
+    </bean>
+    <bean id="accountDao" class="com.zff.dao.impl.AccountDaoImpl">
+        <property name="dataTemplate" ref="dataTemplate"></property>
+    </bean>
+    <!--配置事务管理器
+        1.配置事务管理器
+        2.配置事务的通知:导入xmlns:tx
+        isolation 数据库的隔离级别
+        propagation：事务的传播行为 增删改查
+        read-only：查询方法采用
+        timeout：事务的超时时间
+        rollback-for：异常时事务回滚
+        no-rollback-for:产生指定异常，事务不回滚-->
+    <bean id="transactionManger" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="tranfer" isolation="DEFAULT" propagation="REQUIRED" read-only="false"  timeout="-1"/>
+            <tx:method name="find*" isolation="DEFAULT"  propagation="REQUIRED" read-only="true" timeout="-1"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <aop:pointcut id="pt1"  expression="excution(* com.zff.service.Impl.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pt1"></aop:advisor>
+    </aop:config>
 </beans>

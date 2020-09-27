@@ -18,5 +18,25 @@ public class Test {
             }
         });
         cglibpro.sale(1000f);
+        db_table(1000005570);
+    }
+    public static void  db_table(Integer member_id){
+    int s = member_id % 16;
+    int i = 0;
+    if(s >= 0 & s < 4){
+            i = 1;
+        }
+    else if( s >= 4 & s < 8){
+        i = 2;
+    }else if(s >= 8 & s < 12){
+        i = 3;
+    }else if(s >= 12 & s < 16){
+        i = 4;
+    }
+
+
+    int j = member_id % 4;
+        System.out.println("i是分库"+i+",j是分表"+j);
+
     }
 }
