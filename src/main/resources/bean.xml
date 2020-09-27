@@ -3,18 +3,21 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop.xsd">
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- IOC控制反射的作用是为了解耦程序间的耦合
     依赖注入的作用是维护程序间的关系
     -->
-<!--    <context:component-scan base-package="com.zff"></context:component-scan>-->
+    <context:component-scan base-package="com.zff"></context:component-scan>
 
     <!--    <bean id="accountService" class="com.zff.service.impl.AccountServiceImpl">-->
     <!--        <property name="name" value="123"></property>-->
@@ -32,9 +35,9 @@
     @Value
     用于注入基本类型和String类型的数据
     -->
-    <bean id="accountService" class="com.zff.service.Impl.AccountServiceImpl">
-        <property name="accountDao" ref="accountDao"></property>
-    </bean>
+<!--    <bean id="accountService" class="com.zff.service.Impl.AccountServiceImpl">-->
+<!--        <property name="accountDao" ref="accountDao"></property>-->
+<!--    </bean>-->
 
     <!--配置jdbc-->
     <bean id="dataTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
@@ -47,9 +50,9 @@
         <property name="username" value="root"></property>
         <property name="password" value="123456"></property>
     </bean>
-    <bean id="accountDao" class="com.zff.dao.impl.AccountDaoImpl">
-        <property name="dataTemplate" ref="dataTemplate"></property>
-    </bean>
+<!--    <bean id="accountDao" class="com.zff.dao.impl.AccountDaoImpl">-->
+<!--        <property name="dataTemplate" ref="dataTemplate"></property>-->
+<!--    </bean>-->
     <!--配置事务管理器
         1.配置事务管理器
         2.配置事务的通知:导入xmlns:tx
@@ -62,14 +65,17 @@
     <bean id="transactionManger" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="dataSource" ref="dataSource"></property>
     </bean>
-    <tx:advice id="txAdvice" transaction-manager="transactionManager">
-        <tx:attributes>
-            <tx:method name="tranfer" isolation="DEFAULT" propagation="REQUIRED" read-only="false"  timeout="-1"/>
-            <tx:method name="find*" isolation="DEFAULT"  propagation="REQUIRED" read-only="true" timeout="-1"/>
-        </tx:attributes>
-    </tx:advice>
-    <aop:config>
-        <aop:pointcut id="pt1"  expression="excution(* com.zff.service.Impl.*.*(..))"/>
-        <aop:advisor advice-ref="txAdvice" pointcut-ref="pt1"></aop:advisor>
-    </aop:config>
+<!--    <tx:advice id="txAdvice" transaction-manager="transactionManager">-->
+<!--        <tx:attributes>-->
+<!--            <tx:method name="tranfer" isolation="DEFAULT" propagation="REQUIRED" read-only="false"  timeout="-1"/>-->
+<!--            <tx:method name="find*" isolation="DEFAULT"  propagation="REQUIRED" read-only="true" timeout="-1"/>-->
+<!--        </tx:attributes>-->
+<!--    </tx:advice>-->
+<!--    <aop:config>-->
+<!--        <aop:pointcut id="pt1"  expression="excution(* com.zff.service.Impl.*.*(..))"/>-->
+<!--        <aop:advisor advice-ref="txAdvice" pointcut-ref="pt1"></aop:advisor>-->
+<!--    </aop:config>-->
+
+    <!--开启注解事务的支持-->
+    <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
 </beans>
